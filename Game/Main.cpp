@@ -1,6 +1,7 @@
 #include "Engine.h"
-#include <iostream>
 #include <SDL.h>
+#include <SDL_Image.h>
+#include <iostream>
 
 int main(int, char**)
 {
@@ -9,6 +10,8 @@ int main(int, char**)
 		std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
 		return 1;
 	}
+
+	IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 
 	SDL_Window* window = SDL_CreateWindow("GAT150", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 	if (window == nullptr)
@@ -24,6 +27,11 @@ int main(int, char**)
 	PhoenixEngine::SetFilePath("../Resources");
 	std::cout << PhoenixEngine::GetFilePath() << std::endl;
 
+	SDL_Surface* surface = IMG_Load("sf2.png");
+
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface); 
+	SDL_FreeSurface(surface);
+
 	bool quit = false;
 	SDL_Event event;
 	while (!quit)
@@ -36,9 +44,11 @@ int main(int, char**)
 				break;
 		}
 
+		SDL_RenderCopy(renderer, texture, NULL, NULL);
 		SDL_RenderPresent(renderer);
 	}
 
+	IMG_Quit();
 	SDL_Quit();
 
 	return 0;
