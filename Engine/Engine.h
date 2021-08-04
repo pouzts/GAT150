@@ -13,6 +13,8 @@
 #include "Math/Transform.h"
 
 // Graphics
+#include "Graphics/Renderer.h"
+#include "Graphics/Texture.h"
 
 // Framework
 #include "Framework/EventSystem.h"

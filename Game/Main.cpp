@@ -5,38 +5,21 @@
 
 int main(int, char**)
 {
-	if (SDL_Init(SDL_INIT_VIDEO) != 0)
-	{
-		std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
-		return 1;
-	}
-
-	IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
-
-	SDL_Window* window = SDL_CreateWindow("GAT150", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
-	if (window == nullptr)
-	{
-		std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
-		SDL_Quit();
-		return 1;
-	}
-
-	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
+	PhoenixEngine::Engine engine;
+	engine.Startup();
+	engine.Get<PhoenixEngine::Renderer>()->Create("GAT150", 800, 600);
 
 	std::cout << PhoenixEngine::GetFilePath() << std::endl;
 	PhoenixEngine::SetFilePath("../Resources");
 	std::cout << PhoenixEngine::GetFilePath() << std::endl;
 
-	SDL_Surface* surface = IMG_Load("sf2.png");
-
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface); 
-	SDL_FreeSurface(surface);
+	std::shared_ptr<PhoenixEngine::Texture> texture = engine.Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("sf2.png", engine.Get<PhoenixEngine::Renderer>());
 
 	bool quit = false;
 	SDL_Event event;
 	while (!quit)
 	{
-		SDL_WaitEvent(&event);
+		SDL_PollEvent(&event);
 		switch (event.type)
 		{
 			case SDL_QUIT:
@@ -44,11 +27,22 @@ int main(int, char**)
 				break;
 		}
 
-		SDL_RenderCopy(renderer, texture, NULL, NULL);
-		SDL_RenderPresent(renderer);
+		engine.Get<PhoenixEngine::Renderer>()->BeginFrame();
+		
+		PhoenixEngine::Vector2 position{ 300,300 };
+		engine.Get<PhoenixEngine::Renderer>()->Draw(texture, position);
+
+		engine.Get<PhoenixEngine::Renderer>()->EndFrame();
+
+		/*for (int i = 0; i < 50; i++)
+		{
+			SDL_Rect src{ 32, 64, 32, 64 };
+			SDL_Rect dest{ PhoenixEngine::RandomRangeInt(0,screen.x), PhoenixEngine::RandomRangeInt(0,screen.y), 32, 48 };
+			SDL_RenderCopy(renderer, texture, &src, &dest);
+		}
+		*/
 	}
 
-	IMG_Quit();
 	SDL_Quit();
 
 	return 0;
