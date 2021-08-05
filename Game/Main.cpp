@@ -9,11 +9,22 @@ int main(int, char**)
 	engine.Startup();
 	engine.Get<PhoenixEngine::Renderer>()->Create("GAT150", 800, 600);
 
-	std::cout << PhoenixEngine::GetFilePath() << std::endl;
+	PhoenixEngine::Scene scene;
+
+	scene.engine = &engine;
+
 	PhoenixEngine::SetFilePath("../Resources");
-	std::cout << PhoenixEngine::GetFilePath() << std::endl;
 
 	std::shared_ptr<PhoenixEngine::Texture> texture = engine.Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("sf2.png", engine.Get<PhoenixEngine::Renderer>());
+
+	for (int i = 0; i < 200; i++)
+	{
+		PhoenixEngine::Transform transform{ PhoenixEngine::Vector2{PhoenixEngine::RandomRange(0.0f, 800.0f), PhoenixEngine::RandomRange(0.0f, 600.0f)}, PhoenixEngine::RandomRange(0.0f, 360.0f), 1.0f };
+		std::unique_ptr<PhoenixEngine::Actor> actor = std::make_unique<PhoenixEngine::Actor>(transform, texture);
+
+		scene.AddActor(std::move(actor));
+	}
+
 
 	bool quit = false;
 	SDL_Event event;
@@ -27,20 +38,14 @@ int main(int, char**)
 				break;
 		}
 
+		engine.Update(0);
+		scene.Update(0);
+
 		engine.Get<PhoenixEngine::Renderer>()->BeginFrame();
 		
-		PhoenixEngine::Vector2 position{ 300,300 };
-		engine.Get<PhoenixEngine::Renderer>()->Draw(texture, position);
+		scene.Draw(engine.Get<PhoenixEngine::Renderer>());
 
 		engine.Get<PhoenixEngine::Renderer>()->EndFrame();
-
-		/*for (int i = 0; i < 50; i++)
-		{
-			SDL_Rect src{ 32, 64, 32, 64 };
-			SDL_Rect dest{ PhoenixEngine::RandomRangeInt(0,screen.x), PhoenixEngine::RandomRangeInt(0,screen.y), 32, 48 };
-			SDL_RenderCopy(renderer, texture, &src, &dest);
-		}
-		*/
 	}
 
 	SDL_Quit();

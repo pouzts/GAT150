@@ -23,6 +23,15 @@ namespace PhoenixEngine
 			std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
 			return false;
 		}
+
 		return true;
+	}
+
+	Vector2 Texture::GetSize() const
+	{
+		SDL_Point point;
+		SDL_QueryTexture(texture, nullptr, nullptr, &point.x, &point.y);
+		
+		return Vector2{ point.x, point.y };
 	}
 }
