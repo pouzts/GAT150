@@ -2,6 +2,9 @@
 #include <SDL.h>
 #include <SDL_Image.h>
 #include <iostream>
+#include <windows.h>
+
+using timer_t = DWORD;
 
 int main(int, char**)
 {
@@ -28,6 +31,8 @@ int main(int, char**)
 
 	bool quit = false;
 	SDL_Event event;
+	float quitTime = engine.time.time + 3.0f;
+
 	while (!quit)
 	{
 		SDL_PollEvent(&event);
@@ -38,16 +43,19 @@ int main(int, char**)
 				break;
 		}
 
-		engine.Update(0);
-		scene.Update(0);
-
-		engine.Get<PhoenixEngine::Renderer>()->BeginFrame();
-		
-		scene.Draw(engine.Get<PhoenixEngine::Renderer>());
-
-		engine.Get<PhoenixEngine::Renderer>()->EndFrame();
-
+		//update
+		engine.Update();
 		quit = (engine.Get<PhoenixEngine::InputSystem>()->GetKeyState(SDL_SCANCODE_ESCAPE) == PhoenixEngine::InputSystem::eKeyState::Pressed);
+		scene.Update(engine.time.deltaTime);
+
+		//std::cout << engine.time.time << std::endl;
+		//if (engine.time.time >= quitTime) quit = true;
+		engine.time.timeScale = 2;
+
+		// draw
+		engine.Get<PhoenixEngine::Renderer>()->BeginFrame();
+		scene.Draw(engine.Get<PhoenixEngine::Renderer>());
+		engine.Get<PhoenixEngine::Renderer>()->EndFrame();
 	}
 
 	SDL_Quit();

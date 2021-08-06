@@ -172,6 +172,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Audio\AudioSystem.cpp" />
+    <ClCompile Include="Core\Timer.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="Framework\EventSystem.cpp" />
@@ -188,6 +189,7 @@
   <ItemGroup>
     <ClInclude Include="Audio\AudioSystem.h" />
     <ClInclude Include="Core\FileSystem.h" />
+    <ClInclude Include="Core\Timer.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Framework\EventSystem.h" />
     <ClInclude Include="Framework\System.h" />
