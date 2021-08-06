@@ -24,6 +24,9 @@
 #include "Object/Scene.h"
 #include "Object/Actor.h"
 
+//Input
+#include "Input/InputSystem.h"
+
 #include <vector>
 #include <memory>
 #include <algorithm>

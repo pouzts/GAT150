@@ -46,6 +46,8 @@ int main(int, char**)
 		scene.Draw(engine.Get<PhoenixEngine::Renderer>());
 
 		engine.Get<PhoenixEngine::Renderer>()->EndFrame();
+
+		quit = (engine.Get<PhoenixEngine::InputSystem>()->GetKeyState(SDL_SCANCODE_ESCAPE) == PhoenixEngine::InputSystem::eKeyState::Pressed);
 	}
 
 	SDL_Quit();
