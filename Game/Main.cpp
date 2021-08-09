@@ -18,15 +18,16 @@ int main(int, char**)
 
 	PhoenixEngine::SetFilePath("../Resources");
 
-	std::shared_ptr<PhoenixEngine::Texture> texture = engine.Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("sf2.png", engine.Get<PhoenixEngine::Renderer>());
+	std::shared_ptr<PhoenixEngine::Texture> ryuTexture = engine.Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("sf2.png", engine.Get<PhoenixEngine::Renderer>());
+	std::shared_ptr<PhoenixEngine::Texture> particleTexture = engine.Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("explosion.png", engine.Get<PhoenixEngine::Renderer>());
 
-	for (int i = 0; i < 200; i++)
+	/*for (int i = 0; i < 200; i++)
 	{
 		PhoenixEngine::Transform transform{ PhoenixEngine::Vector2{PhoenixEngine::RandomRange(0.0f, 800.0f), PhoenixEngine::RandomRange(0.0f, 600.0f)}, PhoenixEngine::RandomRange(0.0f, 360.0f), 1.0f };
 		std::unique_ptr<PhoenixEngine::Actor> actor = std::make_unique<PhoenixEngine::Actor>(transform, texture);
 
 		scene.AddActor(std::move(actor));
-	}
+	}*/
 
 
 	bool quit = false;
@@ -45,7 +46,19 @@ int main(int, char**)
 
 		//update
 		engine.Update();
-		quit = (engine.Get<PhoenixEngine::InputSystem>()->GetKeyState(SDL_SCANCODE_ESCAPE) == PhoenixEngine::InputSystem::eKeyState::Pressed);
+		if (engine.Get<PhoenixEngine::InputSystem>()->GetKeyState(SDL_SCANCODE_ESCAPE) == PhoenixEngine::InputSystem::eKeyState::Pressed)
+		{
+			quit = true;
+		}
+		
+		if (engine.Get<PhoenixEngine::InputSystem>()->GetButtonState((int)PhoenixEngine::InputSystem::eMouseButton::Left) == PhoenixEngine::InputSystem::eKeyState::Pressed)
+		{
+			PhoenixEngine::Vector2 position = engine.Get<PhoenixEngine::InputSystem>()->GetMousePosition();
+			// Create Particle System
+			engine.Get<PhoenixEngine::ParticleSystem>()->Create(position, 50, 5.0f, particleTexture, 10.0f);
+			//std::cout << position.x << " " << position.y << std::endl;
+		}
+
 		scene.Update(engine.time.deltaTime);
 
 		//std::cout << engine.time.time << std::endl;
@@ -55,6 +68,7 @@ int main(int, char**)
 		// draw
 		engine.Get<PhoenixEngine::Renderer>()->BeginFrame();
 		scene.Draw(engine.Get<PhoenixEngine::Renderer>());
+		engine.Draw(engine.Get<PhoenixEngine::Renderer>());
 		engine.Get<PhoenixEngine::Renderer>()->EndFrame();
 	}
 

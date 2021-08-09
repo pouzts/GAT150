@@ -8,6 +8,7 @@ namespace PhoenixEngine
 		systems.push_back(std::make_unique<EventSystem>());
 		systems.push_back(std::make_unique<ResourceSystem>());
 		systems.push_back(std::make_unique<InputSystem>());
+		systems.push_back(std::make_unique<ParticleSystem>());
 
 		std::for_each(systems.begin(), systems.end(), [](auto& system) {system->Startup(); });
 	}
@@ -23,8 +24,8 @@ namespace PhoenixEngine
 		std::for_each(systems.begin(), systems.end(), [this](auto& system) {system->Update(this->time.deltaTime);});
 	}
 	
-	void Engine::Draw()
+	void Engine::Draw(Renderer* renderer)
 	{
-		
+		std::for_each(systems.begin(), systems.end(), [renderer](auto& system) {if (dynamic_cast<GraphicSystem*>(system.get())) dynamic_cast<GraphicSystem*>(system.get())->Draw(renderer); });
 	}
 }
