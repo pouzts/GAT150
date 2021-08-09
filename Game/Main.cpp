@@ -18,8 +18,8 @@ int main(int, char**)
 
 	PhoenixEngine::SetFilePath("../Resources");
 
-	std::shared_ptr<PhoenixEngine::Texture> ryuTexture = engine.Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("sf2.png", engine.Get<PhoenixEngine::Renderer>());
-	std::shared_ptr<PhoenixEngine::Texture> particleTexture = engine.Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("explosion.png", engine.Get<PhoenixEngine::Renderer>());
+	std::shared_ptr<PhoenixEngine::Texture> texture = engine.Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("sf2.png", engine.Get<PhoenixEngine::Renderer>());
+	
 
 	/*for (int i = 0; i < 200; i++)
 	{
@@ -55,7 +55,8 @@ int main(int, char**)
 		{
 			PhoenixEngine::Vector2 position = engine.Get<PhoenixEngine::InputSystem>()->GetMousePosition();
 			// Create Particle System
-			engine.Get<PhoenixEngine::ParticleSystem>()->Create(position, 50, 5.0f, particleTexture, 10.0f);
+			std::shared_ptr<PhoenixEngine::Texture> particleTexture = engine.Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("explosion.png", engine.Get<PhoenixEngine::Renderer>());
+			engine.Get<PhoenixEngine::ParticleSystem>()->Create(position, 50, 5.0f, particleTexture, 300.0f);
 			//std::cout << position.x << " " << position.y << std::endl;
 		}
 

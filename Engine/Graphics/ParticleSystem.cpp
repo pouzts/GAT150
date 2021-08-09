@@ -1,5 +1,5 @@
 #include "ParticleSystem.h"
-#include "../Math/Random.h"
+#include "Math/Random.h"
 
 namespace PhoenixEngine {
 
@@ -33,7 +33,7 @@ namespace PhoenixEngine {
 		{
 			if (particle.isActive)
 			{
-				
+				renderer->Draw(particle.texture, particle.position);
 			}
 		}
 	}
