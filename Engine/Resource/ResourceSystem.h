@@ -15,6 +15,8 @@ namespace PhoenixEngine
 		void Shutdown() override {}
 		void Update(float dt) override {}
 
+		void Add(const std::string& name, std::shared_ptr<PhoenixEngine::Resource> resource);
+
 		template <typename T>
 		std::shared_ptr<T> Get(const std::string& name, void* data = nullptr);
 
@@ -37,5 +39,10 @@ namespace PhoenixEngine
 
 			return resource;
 		}
+	}
+
+	inline void ResourceSystem::Add(const std::string& name, std::shared_ptr<PhoenixEngine::Resource> resource)
+	{
+		resources[name] = resource;
 	}
 }

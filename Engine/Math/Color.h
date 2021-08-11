@@ -1,6 +1,7 @@
 #pragma once
 #define NOMINMAX
 #include <iostream>
+#include <SDL.h>
 
 namespace PhoenixEngine 
 {
@@ -30,6 +31,17 @@ namespace PhoenixEngine
 			std::uint8_t green = static_cast<std::uint8_t>(g * 255); // 0-1 -> 0-255
 			std::uint8_t blue = static_cast<std::uint8_t>(b * 255); // 0-1 -> 0-255
 			return (red | green << 8 | blue << 16); // 0-1 -> 0-255
+		}
+
+		operator SDL_Color() const
+		{
+			SDL_Color color;
+			color.r = static_cast<Uint8>(r * 255);
+			color.b = static_cast<Uint8>(b * 255);
+			color.g = static_cast<Uint8>(g * 255);
+			color.a = static_cast<Uint8>(255);
+
+			return color;
 		}
 
 		friend std::istream& operator >> (std::istream& stream, Color& c);

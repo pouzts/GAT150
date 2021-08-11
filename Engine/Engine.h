@@ -20,6 +20,7 @@
 #include "Graphics/Renderer.h"
 #include "Graphics/Texture.h"
 #include "Graphics/ParticleSystem.h"
+#include "Graphics/Font.h"
 
 // Framework
 #include "Framework/EventSystem.h"

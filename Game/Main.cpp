@@ -21,7 +21,7 @@ int main(int, char**)
 	std::shared_ptr<PhoenixEngine::Texture> texture = engine.Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("sf2.png", engine.Get<PhoenixEngine::Renderer>());
 	
 	engine.Get<PhoenixEngine::AudioSystem>()->AddAudio("explosion", "audio/explosion.wav");
-	engine.Get<PhoenixEngine::AudioSystem>()->AddAudio("music", "audio/explosion.wav");
+	engine.Get<PhoenixEngine::AudioSystem>()->AddAudio("music", "audio/music.mp3");
 	PhoenixEngine::AudioChannel channel = engine.Get<PhoenixEngine::AudioSystem>()->PlayAudio("music", 1, 1, true);
 
 	for (int i = 0; i < 200; i++)
@@ -31,6 +31,17 @@ int main(int, char**)
 
 		scene.AddActor(std::move(actor));
 	}
+
+	// get font from resource system
+	int size = 16;
+	std::shared_ptr<PhoenixEngine::Font> font = engine.Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Font>("fonts/November.ttf", &size);
+
+	// create font texture
+	std::shared_ptr<PhoenixEngine::Texture> textTexture = std::make_shared<PhoenixEngine::Texture>(engine.Get<PhoenixEngine::Renderer>());
+	// set font texture with font surface
+	textTexture->Create(font->CreateSurface("hello world", PhoenixEngine::Color{ 1, 1, 1 }));
+	// add font texture to resource system
+	engine.Get<PhoenixEngine::ResourceSystem>()->Add("textTexture", textTexture);
 
 
 	bool quit = false;
@@ -73,9 +84,16 @@ int main(int, char**)
 
 		// draw
 		engine.Get<PhoenixEngine::Renderer>()->BeginFrame();
+
 		scene.Draw(engine.Get<PhoenixEngine::Renderer>());
 		engine.Draw(engine.Get<PhoenixEngine::Renderer>());
+
+		PhoenixEngine::Transform t;
+		t.position = { 30, 30 };
+		engine.Get<PhoenixEngine::Renderer>()->Draw(textTexture, t);
+
 		engine.Get<PhoenixEngine::Renderer>()->EndFrame();
+
 	}
 
 	SDL_Quit();
