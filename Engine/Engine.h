@@ -8,6 +8,7 @@
 // Core
 #include "Core/FileSystem.h"
 #include "Core/Timer.h"
+#include "Core/Utilities.h"
 
 // Math
 #include "Math/Vector2.h"

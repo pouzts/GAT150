@@ -3,6 +3,7 @@
 #include <SDL_Image.h>
 #include <iostream>
 #include <windows.h>
+#include <cassert>
 
 using timer_t = DWORD;
 
@@ -39,7 +40,7 @@ int main(int, char**)
 	// create font texture
 	std::shared_ptr<PhoenixEngine::Texture> textTexture = std::make_shared<PhoenixEngine::Texture>(engine.Get<PhoenixEngine::Renderer>());
 	// set font texture with font surface
-	textTexture->Create(font->CreateSurface("hello world", PhoenixEngine::Color{ 1, 1, 1 }));
+	textTexture->Create(font->CreateSurface("HELLO WORLD", PhoenixEngine::Color{ PhoenixEngine::Random(), PhoenixEngine::Random(), PhoenixEngine::Random()}));
 	// add font texture to resource system
 	engine.Get<PhoenixEngine::ResourceSystem>()->Add("textTexture", textTexture);
 

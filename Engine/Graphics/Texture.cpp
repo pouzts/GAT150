@@ -2,11 +2,13 @@
 #include "Renderer.h"
 #include <SDL_Image.h>
 #include <iostream>
+#include <cassert>
 
 namespace PhoenixEngine
 {
 	Texture::Texture(Renderer* renderer)
 	{
+		assert(renderer);
 		this->renderer = renderer->renderer;
 	}
 
@@ -34,6 +36,8 @@ namespace PhoenixEngine
 
 	bool Texture::Create(SDL_Surface* surface)
 	{
+		assert(surface);
+
 		// create texture
 		texture = SDL_CreateTextureFromSurface(renderer, surface);
 		SDL_FreeSurface(surface);

@@ -27,15 +27,15 @@ namespace PhoenixEngine
 	template<typename T>
 	inline std::shared_ptr<T> ResourceSystem::Get(const std::string& name, void* data)
 	{
-		if (resources.find(name) != resources.end())
+		if (resources.find(string_tolower(name)) != resources.end())
 		{
-			return std::dynamic_pointer_cast<T>(resources[name]);
+			return std::dynamic_pointer_cast<T>(resources[string_tolower(name)]);
 		}
 		else
 		{
 			std::shared_ptr<T> resource = std::make_shared<T>();
 			resource->Load(name, data);
-			resources[name] = resource;
+			resources[string_tolower(name)] = resource;
 
 			return resource;
 		}
@@ -43,6 +43,6 @@ namespace PhoenixEngine
 
 	inline void ResourceSystem::Add(const std::string& name, std::shared_ptr<PhoenixEngine::Resource> resource)
 	{
-		resources[name] = resource;
+		resources[string_tolower(name)] = resource;
 	}
 }
