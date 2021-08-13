@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Object/Actor.h"
+#include "Actors/Player.h"
 #include "Resource/ResourceSystem.h"
 
 void Game::Initialize()
@@ -13,19 +14,12 @@ void Game::Initialize()
 
 	PhoenixEngine::SetFilePath("../Resources");
 
-	std::shared_ptr<PhoenixEngine::Texture> texture = engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("sf2.png", engine->Get<PhoenixEngine::Renderer>());
-
 	engine->Get<PhoenixEngine::AudioSystem>()->AddAudio("explosion", "audio/explosion.wav");
 	engine->Get<PhoenixEngine::AudioSystem>()->AddAudio("music", "audio/music.mp3");
 	musicChannel = engine->Get<PhoenixEngine::AudioSystem>()->PlayAudio("music", 1, 1, true);
 
-	for (int i = 0; i < 200; i++)
-	{
-		PhoenixEngine::Transform transform{ PhoenixEngine::Vector2{PhoenixEngine::RandomRange(0.0f, 800.0f), PhoenixEngine::RandomRange(0.0f, 600.0f)}, PhoenixEngine::RandomRange(0.0f, 360.0f), 1.0f };
-		std::unique_ptr<PhoenixEngine::Actor> actor = std::make_unique<PhoenixEngine::Actor>(transform, texture);
-
-		scene->AddActor(std::move(actor));
-	}
+	// Create player texture
+	playerTexture = engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("sprites/player.png", engine->Get<PhoenixEngine::Renderer>());
 
 	// get font from resource system
 	int size = 16;
@@ -58,6 +52,7 @@ void Game::Shutdown()
 
 void Game::Update()
 {
+	engine->Update();
 	float dt = engine->time.deltaTime;
 
 	switch (state)
@@ -100,8 +95,6 @@ void Game::Update()
 		break;
 	}
 
-	engine->Update();
-	scene->Update(dt);
 
 	if (engine->Get<PhoenixEngine::InputSystem>()->GetKeyState(SDL_SCANCODE_ESCAPE) == PhoenixEngine::InputSystem::eKeyState::Pressed)
 	{
@@ -118,11 +111,8 @@ void Game::Update()
 		//std::cout << position.x << " " << position.y << std::endl;
 	}
 
-	scene->Update(engine->time.deltaTime);
-
-	//std::cout << engine->time.time << std::endl;
-	//if (engine->time.time >= quitTime) quit = true;
 	engine->time.timeScale = 2;
+	scene->Update(engine->time.deltaTime);
 }
 
 void Game::Draw()
@@ -191,14 +181,14 @@ void Game::DrawTitle(PhoenixEngine::Renderer* renderer)
 
 void Game::UpdateTitle(float dt)
 {
-	/*if (engine->Get<PhoenixEngine::InputSystem>()->GetKeyState(SDL_SCANCODE_SPACE) == PhoenixEngine::InputSystem::eKeyState::Pressed) {
+	if (engine->Get<PhoenixEngine::InputSystem>()->GetKeyState(SDL_SCANCODE_SPACE) == PhoenixEngine::InputSystem::eKeyState::Pressed) {
 		state = eState::StartGame;
-	}*/
+	}
 }
 
 void Game::UpdateLevelStart(float dt)
 {
-	//scene->AddActor(std::make_unique<Player>(PhoenixEngine::Transform{ PhoenixEngine::Vector2{400, 300}, 0, 3 }, engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Shape>("playershape.txt"), 300.0f));
+	scene->AddActor(std::make_unique<Player>(PhoenixEngine::Transform{ PhoenixEngine::Vector2{400, 300}, 0, 3 }, playerTexture, 300.0f));
 
 	//for (size_t i = 0; i < level; i++)
 	//{

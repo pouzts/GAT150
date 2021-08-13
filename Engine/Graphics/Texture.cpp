@@ -14,6 +14,8 @@ namespace PhoenixEngine
 
 	bool Texture::Load(const std::string& filename, void* data)
 	{
+		assert(data);
+
 		renderer = static_cast<Renderer*>(data)->renderer;
 
 		SDL_Surface* surface = IMG_Load(filename.c_str());

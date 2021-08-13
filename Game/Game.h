@@ -47,6 +47,7 @@ private:
 	
 	PhoenixEngine::AudioChannel musicChannel;
 	std::shared_ptr<PhoenixEngine::Texture> texture;
+	std::shared_ptr<PhoenixEngine::Texture> playerTexture;
 	std::shared_ptr<PhoenixEngine::Texture> textTexture;
 	std::shared_ptr<PhoenixEngine::Texture> particleTexture;
 };

@@ -1,15 +1,10 @@
 #include "Player.h"
-#include "Projectile.h"
 #include "Math/MathUtils.h"
 #include "Engine.h"
-#include "Enemy.h"
-#include "Astroid.h"
+//#include "Projectile.h"
+//#include "Enemy.h"
+//#include "Astroid.h"
 #include <memory>
-
-Player::Player(const PhoenixEngine::Transform& transform, std::shared_ptr<PhoenixEngine::Shape> shape, float speed) : Actor(transform, shape), speed{speed}
-{
-	
-}
 
 void Player::Initialize()
 {
@@ -30,13 +25,13 @@ void Player::Initialize()
 	locator->transform.localPosition = PhoenixEngine::Vector2{ 8, 0 };
 	AddChild(std::move(locator));
 
-	std::unique_ptr blaster = std::make_unique<Actor>(PhoenixEngine::Transform{}, scene->engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Shape>("blasterupgrade.txt"));
-	blaster->transform.localPosition = PhoenixEngine::Vector2{ 0, 0 };
-	AddChild(std::move(blaster));
+	//std::unique_ptr blaster = std::make_unique<Actor>(PhoenixEngine::Transform{}, scene->engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Shape>("blasterupgrade.txt"));
+	//blaster->transform.localPosition = PhoenixEngine::Vector2{ 0, 0 };
+	//AddChild(std::move(blaster));
 
-	std::unique_ptr engine = std::make_unique<Actor>(PhoenixEngine::Transform{}, scene->engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Shape>("engineupgrade.txt"));
+	/*std::unique_ptr engine = std::make_unique<Actor>(PhoenixEngine::Transform{}, scene->engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Shape>("engineupgrade.txt"));
 	engine->transform.localPosition = PhoenixEngine::Vector2{ -5, 0 };
-	AddChild(std::move(engine));
+	AddChild(std::move(engine));*/
 }
 
 void Player::Update(float dt)
@@ -45,9 +40,9 @@ void Player::Update(float dt)
 
 	// Movement
 	float thrust = 0;
-	if (Core::Input::IsPressed('A')) transform.rotation -= 5 * dt;
-	if (Core::Input::IsPressed('D')) transform.rotation += 5 * dt;
-	if (Core::Input::IsPressed('W')) thrust = speed;
+	if (scene->engine->Get<PhoenixEngine::InputSystem>()->GetKeyState(SDL_SCANCODE_A) == PhoenixEngine::InputSystem::eKeyState::Held) transform.rotation -= 5 * dt;
+	if (scene->engine->Get<PhoenixEngine::InputSystem>()->GetKeyState(SDL_SCANCODE_D) == PhoenixEngine::InputSystem::eKeyState::Held) transform.rotation += 5 * dt;
+	if (scene->engine->Get<PhoenixEngine::InputSystem>()->GetKeyState(SDL_SCANCODE_W) == PhoenixEngine::InputSystem::eKeyState::Held) thrust = speed;
 
 	// Acceleration
 	PhoenixEngine::Vector2 acceleration;
@@ -61,7 +56,7 @@ void Player::Update(float dt)
 	transform.position.y = PhoenixEngine::Wrap(transform.position.y, 0.0f, 600.0f);
 
 	// Fire
-	fireTimer -= dt;
+	/*fireTimer -= dt;
 	if (fireTimer <= 0 && Core::Input::IsPressed(VK_SPACE))
 	{
 		fireTimer = fireRate;
@@ -88,42 +83,42 @@ void Player::Update(float dt)
 	}
 	
 		std::vector<PhoenixEngine::Color> colors = {PhoenixEngine::Color::yellow, PhoenixEngine::Color::white, PhoenixEngine::Color::orange};
-		scene->engine->Get<PhoenixEngine::ParticleSystem>()->Create(children[0]->transform.position, 3, 2, colors, 50, children[0]->transform.rotation, PhoenixEngine::DegToRad(30));
+		scene->engine->Get<PhoenixEngine::ParticleSystem>()->Create(children[0]->transform.position, 3, 2, colors, 50, children[0]->transform.rotation, PhoenixEngine::DegToRad(30));*/
 }
 
 void Player::OnCollision(Actor* actor)
 {
-	if (dynamic_cast<Projectile*>(actor) && actor->tag == "Enemy")
-	{
-		actor->destroy = true;
-		--health;
-		if (health < 1)
-		{
-			destroy = true;
-			scene->engine->Get<PhoenixEngine::ParticleSystem>()->Create(transform.position, 200, 2, PhoenixEngine::Color::white, 50);
-			scene->engine->Get<PhoenixEngine::AudioSystem>()->PlayAudio("explosion");
-			PhoenixEngine::Event event;
-			event.name = "PlayerDead";
-			event.data = std::string("YOU ARE DEAD");
-			scene->engine->Get<PhoenixEngine::EventSystem>()->Notify(event);
-		}
-		else
-		{
-			scene->engine->Get<PhoenixEngine::AudioSystem>()->PlayAudio("hurt");
-		}
-	}
+	//if (dynamic_cast<Projectile*>(actor) && actor->tag == "Enemy")
+	//{
+	//	actor->destroy = true;
+	//	--health;
+	//	if (health < 1)
+	//	{
+	//		destroy = true;
+	//		//scene->engine->Get<PhoenixEngine::ParticleSystem>()->Create(transform.position, 200, 2, PhoenixEngine::Color::white, 50);
+	//		scene->engine->Get<PhoenixEngine::AudioSystem>()->PlayAudio("explosion");
+	//		PhoenixEngine::Event event;
+	//		event.name = "PlayerDead";
+	//		event.data = std::string("YOU ARE DEAD");
+	//		scene->engine->Get<PhoenixEngine::EventSystem>()->Notify(event);
+	//	}
+	//	else
+	//	{
+	//		scene->engine->Get<PhoenixEngine::AudioSystem>()->PlayAudio("hurt");
+	//	}
+	//}
 
-	if (dynamic_cast<Enemy*>(actor) || dynamic_cast<Astroid*>(actor))
-	{
-		health = 0;
-		destroy = true;
-		scene->engine->Get<PhoenixEngine::ParticleSystem>()->Create(transform.position, 200, 2, PhoenixEngine::Color::white, 50);
-		scene->engine->Get<PhoenixEngine::AudioSystem>()->PlayAudio("explosion");
-		PhoenixEngine::Event event;
-		event.name = "PlayerDead";
-		event.data = std::string("YOU ARE DEAD");
-		scene->engine->Get<PhoenixEngine::EventSystem>()->Notify(event);
-	}
+	//if (dynamic_cast<Enemy*>(actor) || dynamic_cast<Astroid*>(actor))
+	//{
+	//	health = 0;
+	//	destroy = true;
+	//	//scene->engine->Get<PhoenixEngine::ParticleSystem>()->Create(transform.position, 200, 2, PhoenixEngine::Color::white, 50);
+	//	scene->engine->Get<PhoenixEngine::AudioSystem>()->PlayAudio("explosion");
+	//	PhoenixEngine::Event event;
+	//	event.name = "PlayerDead";
+	//	event.data = std::string("YOU ARE DEAD");
+	//	scene->engine->Get<PhoenixEngine::EventSystem>()->Notify(event);
+	//}
 }
 
 size_t Player::GetHealth()

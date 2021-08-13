@@ -1,10 +1,10 @@
 #pragma once
-#include "Base/Actor.h"
+#include "Object/Actor.h"
 
 class Player : public PhoenixEngine::Actor
 {
 public:
-	Player(const PhoenixEngine::Transform& transform, std::shared_ptr<PhoenixEngine::Shape> shape, float speed);
+	Player(const PhoenixEngine::Transform& transform, std::shared_ptr<PhoenixEngine::Texture> texture, float speed) : Actor(transform, texture), speed{ speed } {}
 
 	void Initialize() override;
 
