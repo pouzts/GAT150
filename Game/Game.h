@@ -24,8 +24,6 @@ public:
 
 	bool HasQuit() { return quit; }
 private:
-	void DrawTitle(PhoenixEngine::Renderer* renderer);
-	
 	void UpdateTitle(float dt);
 	void UpdateLevelStart(float dt);
 	
@@ -46,9 +44,17 @@ private:
 	size_t level = 1;
 	
 	PhoenixEngine::AudioChannel musicChannel;
-	std::shared_ptr<PhoenixEngine::Texture> texture;
+	
+	// Actor Textures
 	std::shared_ptr<PhoenixEngine::Texture> playerTexture;
+	std::shared_ptr<PhoenixEngine::Texture> enemyTexture;
+	std::shared_ptr<PhoenixEngine::Texture> asteroidTexture;
+
+	// Text Textures
 	std::shared_ptr<PhoenixEngine::Texture> textTexture;
-	std::shared_ptr<PhoenixEngine::Texture> particleTexture;
+	std::shared_ptr<PhoenixEngine::Texture> scoreTexture;
+	std::shared_ptr<PhoenixEngine::Texture> healthTexture;
+
+	std::shared_ptr<PhoenixEngine::Font> font;
 };
 

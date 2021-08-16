@@ -22,7 +22,9 @@ void Enemy::Update(float dt)
 		{
 			fireTimer = fireRate;
 
-			std::unique_ptr<Projectile> projectile = std::make_unique<Projectile>(transform, scene->engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Shape>("enemybulletshape.txt"), 600.0f);
+			PhoenixEngine::SetFilePath("../../Build/Resources");
+
+			std::unique_ptr<Projectile> projectile = std::make_unique<Projectile>(transform, scene->engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("sprites/enemylaser.png", scene->engine->Get<PhoenixEngine::Renderer>()), 600.0f);
 			projectile->tag = "Enemy";
 			scene->AddActor(std::move(projectile));
 
@@ -41,7 +43,11 @@ void Enemy::OnCollision(Actor* actor)
 	{
 		actor->destroy = true;
 		destroy = true;
-		scene->engine->Get<PhoenixEngine::ParticleSystem>()->Create(transform.position, 200, 3, PhoenixEngine::Color::white, 250);
+		
+		PhoenixEngine::SetFilePath("../../Build/Resources");
+		std::shared_ptr<PhoenixEngine::Texture> enemyParticle = scene->engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("sprites/enemypart.png", scene->engine->Get<PhoenixEngine::Renderer>());
+		scene->engine->Get<PhoenixEngine::ParticleSystem>()->Create(transform.position, 3, 2, enemyParticle, 50, transform.rotation, PhoenixEngine::DegToRad(30));
+		
 		scene->engine->Get<PhoenixEngine::AudioSystem>()->PlayAudio("explosion");
 
 		PhoenixEngine::Event event;

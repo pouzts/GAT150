@@ -1,6 +1,8 @@
 #include "Game.h"
 #include "Object/Actor.h"
 #include "Actors/Player.h"
+#include "Actors/Enemy.h"
+#include "Actors/Asteroid.h"
 #include "Resource/ResourceSystem.h"
 
 void Game::Initialize()
@@ -18,27 +20,40 @@ void Game::Initialize()
 	engine->Get<PhoenixEngine::AudioSystem>()->AddAudio("music", "audio/music.mp3");
 	musicChannel = engine->Get<PhoenixEngine::AudioSystem>()->PlayAudio("music", 1, 1, true);
 
-	// Create player texture
+	// Create actor textures
 	playerTexture = engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("sprites/player.png", engine->Get<PhoenixEngine::Renderer>());
+	enemyTexture = engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("sprites/enemy.png", engine->Get<PhoenixEngine::Renderer>());
+	asteroidTexture = engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("sprites/asteroid.png", engine->Get<PhoenixEngine::Renderer>());
 
 	// get font from resource system
 	int size = 16;
-	std::shared_ptr<PhoenixEngine::Font> font = engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Font>("fonts/November.ttf", &size);
-
+	font = engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Font>("fonts/November.ttf", &size);
+	
 	// create font texture
 	textTexture = std::make_shared<PhoenixEngine::Texture>(engine->Get<PhoenixEngine::Renderer>());
 	// set font texture with font surface
-	textTexture->Create(font->CreateSurface("HELLO WORLD", PhoenixEngine::Color{ PhoenixEngine::Random(), PhoenixEngine::Random(), PhoenixEngine::Random() }));
+	textTexture->Create(font->CreateSurface("HELLO WORLD", PhoenixEngine::Color::white));
 	// add font texture to resource system
 	engine->Get<PhoenixEngine::ResourceSystem>()->Add("textTexture", textTexture);
-	
-	particleTexture = engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("particle01.png", engine->Get<PhoenixEngine::Renderer>());
 
-	engine->Get<PhoenixEngine::AudioSystem>()->AddAudio("playerFire", "player_fire.wav");
-	engine->Get<PhoenixEngine::AudioSystem>()->AddAudio("enemyFire", "enemy_fire.wav");
+	// Score Texture
+	scoreTexture = std::make_shared<PhoenixEngine::Texture>(engine->Get<PhoenixEngine::Renderer>());
+	// set font texture with font surface
+	scoreTexture->Create(font->CreateSurface("HELLO WORLD", PhoenixEngine::Color::white));
+	// add font texture to resource system
+	engine->Get<PhoenixEngine::ResourceSystem>()->Add("scoreTexture", scoreTexture);
 
-	engine->Get<PhoenixEngine::AudioSystem>()->AddAudio("explosion", "explosion.wav");
-	engine->Get<PhoenixEngine::AudioSystem>()->AddAudio("hurt", "hurt.wav");
+	healthTexture = std::make_shared<PhoenixEngine::Texture>(engine->Get<PhoenixEngine::Renderer>());
+	// set font texture with font surface
+	healthTexture->Create(font->CreateSurface("HELLO WORLD", PhoenixEngine::Color::white));
+	// add font texture to resource system
+	engine->Get<PhoenixEngine::ResourceSystem>()->Add("healthTexture", healthTexture);
+
+	engine->Get<PhoenixEngine::AudioSystem>()->AddAudio("playerFire", "audio/player_fire.wav");
+	engine->Get<PhoenixEngine::AudioSystem>()->AddAudio("enemyFire", "audio/enemy_fire.wav");
+
+	engine->Get<PhoenixEngine::AudioSystem>()->AddAudio("explosion", "audio/explosion.wav");
+	engine->Get<PhoenixEngine::AudioSystem>()->AddAudio("hurt", "audio/hurt.wav");
 
 	engine->Get<PhoenixEngine::EventSystem>()->Subscribe("AddPoints", std::bind(&Game::OnAddPoints, this, std::placeholders::_1));
 	engine->Get<PhoenixEngine::EventSystem>()->Subscribe("PlayerDead", std::bind(&Game::OnPlayerDead, this, std::placeholders::_1));
@@ -55,6 +70,8 @@ void Game::Update()
 	engine->Update();
 	float dt = engine->time.deltaTime;
 
+	stateTimer += dt;
+
 	switch (state)
 	{
 	case Game::eState::Title:
@@ -69,13 +86,13 @@ void Game::Update()
 		UpdateLevelStart(dt);
 		break;
 	case Game::eState::Game:
-		//health = scene->GetActor<Player>()->GetHealth();
-		/*if (scene->GetActors<Astroid>().size() == 0 && scene->GetActors<Enemy>().size() == 0)
+		health = scene->GetActor<Player>()->GetHealth();
+		if (scene->GetActors<Asteroid>().size() == 0 && scene->GetActors<Enemy>().size() == 0)
 		{
 			state = eState::EndLevel;
 			stateTimer = 0;
 			level++;
-		}*/
+		}
 		break;
 	case Game::eState::EndLevel:
 		if (stateTimer >= 5)
@@ -101,82 +118,76 @@ void Game::Update()
 		quit = true;
 	}
 
-	if (engine->Get<PhoenixEngine::InputSystem>()->GetButtonState((int)PhoenixEngine::InputSystem::eMouseButton::Left) == PhoenixEngine::InputSystem::eKeyState::Pressed)
-	{
-		PhoenixEngine::Vector2 position = engine->Get<PhoenixEngine::InputSystem>()->GetMousePosition();
-		// Create Particle System
-		engine->Get<PhoenixEngine::ParticleSystem>()->Create(position, 50, 5.0f, particleTexture, 300.0f);
-		engine->Get<PhoenixEngine::AudioSystem>()->PlayAudio("explosion", 1, PhoenixEngine::RandomRange(0.2f, 2.0f));
-		musicChannel.SetPitch(PhoenixEngine::RandomRange(0.5f, 2.0f));
-		//std::cout << position.x << " " << position.y << std::endl;
-	}
-
 	engine->time.timeScale = 2;
 	scene->Update(engine->time.deltaTime);
 }
 
 void Game::Draw()
 {
+	std::string scoreText = "SCORE: " + std::to_string(score);
+	std::string healthText = "HEALTH: " + std::to_string(health);
+	std::string updateText = "    ";
+
 	switch (state)
 	{
 	case Game::eState::Title:
-		//DrawTitle(renderer);
+		updateText = "Press SPACE to Continue";
 		break;
 	case Game::eState::StartGame:
+		updateText = "     ";
 		break;
 	case Game::eState::StartLevel:
+		updateText = "     ";
 		break;
 	case Game::eState::Game:
 		break;
 	case Game::eState::EndLevel:
 	{
-		std::string levelname = "Level " + std::to_string(level);
-		/*graphics.SetColor(PhoenixEngine::Color::white);
-		graphics.DrawString(350, 400, levelname.c_str());*/
+		updateText = "Level " + std::to_string(level);
+		//textTexture->Create(font->CreateSurface(levelname, PhoenixEngine::Color::white));
 	}
 	break;
 	case Game::eState::GameOver:
-		/*graphics.SetColor(PhoenixEngine::Color::white);
-		graphics.DrawString(350, 400, "Game Over");*/
+		updateText = "Game Over";
 		break;
 	default:
 		break;
 	}
 
-	/*graphics.SetColor(PhoenixEngine::Color::blue);
-	graphics.DrawString(30, 20, "SCORE: ");
-	graphics.SetColor(PhoenixEngine::Color::white);
-	graphics.DrawString(80, 20, std::to_string(score).c_str());
-	graphics.SetColor(PhoenixEngine::Color::red);
-	graphics.DrawString(720, 20, "HEALTH: ");
-	graphics.SetColor(PhoenixEngine::Color::white);
-	graphics.DrawString(770, 20, std::to_string(health).c_str());*/
-
 	// draw
 	engine->Get<PhoenixEngine::Renderer>()->BeginFrame();
 
-	scene->Draw(engine->Get<PhoenixEngine::Renderer>());
 	engine->Draw(engine->Get<PhoenixEngine::Renderer>());
+	scene->Draw(engine->Get<PhoenixEngine::Renderer>());
 
-	PhoenixEngine::Transform t;
-	t.position = { 30, 30 };
-	engine->Get<PhoenixEngine::Renderer>()->Draw(textTexture, t);
+	//Update Text
+	engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("textTexture");
+	textTexture->Create(font->CreateSurface(updateText, PhoenixEngine::Color::white));
+	//Update score
+	engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("scoreTexture");
+	scoreTexture->Create(font->CreateSurface(scoreText, PhoenixEngine::Color::white));
+	//Update health
+	engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("textTexture");
+	healthTexture->Create(font->CreateSurface(healthText, PhoenixEngine::Color::white));
+	{
+		PhoenixEngine::Transform t;
+		t.position = { 400, 400 };
+		engine->Get<PhoenixEngine::Renderer>()->Draw(textTexture, t);
+	}
+
+	{
+		PhoenixEngine::Transform t;
+		t.position = { 60, 30 };
+		engine->Get<PhoenixEngine::Renderer>()->Draw(scoreTexture, t);
+	}
+
+	{
+		PhoenixEngine::Transform t;
+		t.position = { 740, 30 };
+		engine->Get<PhoenixEngine::Renderer>()->Draw(healthTexture, t);
+	}
 
 	engine->Get<PhoenixEngine::Renderer>()->EndFrame();
-}
-
-void Game::DrawTitle(PhoenixEngine::Renderer* renderer)
-{
-	/*graphics.SetColor(PhoenixEngine::Color(PhoenixEngine::Random(), PhoenixEngine::Random(), PhoenixEngine::Random()));
-	engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Shape>("logov.txt")->Draw(graphics, PhoenixEngine::Vector2{ 150, 300 }, 0, 3);
-	engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Shape>("logoe.txt")->Draw(graphics, PhoenixEngine::Vector2{ 250, 300 }, 0, 3);
-	engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Shape>("logor.txt")->Draw(graphics, PhoenixEngine::Vector2{ 350, 300 }, 0, 3);
-	engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Shape>("logot.txt")->Draw(graphics, PhoenixEngine::Vector2{ 450, 300 }, 0, 3);
-	engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Shape>("logoe.txt")->Draw(graphics, PhoenixEngine::Vector2{ 550, 300 }, 0, 3);
-	engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Shape>("logox.txt")->Draw(graphics, PhoenixEngine::Vector2{ 650, 300 }, 0, 3);
-
-	graphics.SetColor(PhoenixEngine::Color::white);
-	graphics.DrawString(325, 400, "Press SPACE to continue");*/
 }
 
 void Game::UpdateTitle(float dt)
@@ -188,35 +199,35 @@ void Game::UpdateTitle(float dt)
 
 void Game::UpdateLevelStart(float dt)
 {
-	scene->AddActor(std::make_unique<Player>(PhoenixEngine::Transform{ PhoenixEngine::Vector2{400, 300}, 0, 3 }, playerTexture, 300.0f));
+	scene->AddActor(std::make_unique<Player>(PhoenixEngine::Transform{ PhoenixEngine::Vector2{400, 300}, 0, 3 }, playerTexture, 150.0f));
 
-	//for (size_t i = 0; i < level; i++)
-	//{
-	//	bool hasSpawned = false;
-	//	while (!hasSpawned) {
-	//		float spawnX = PhoenixEngine::RandomRange(0.0f, 800.0f);
-	//		float spawnY = PhoenixEngine::RandomRange(0.0f, 600.0f);
-	//		if ((spawnX < 300.0f || spawnX > 500.0f) && (spawnY < 200.0f || spawnY > 400.0f)) 
-	//		{
-	//			//scene->AddActor(std::make_unique<Enemy>(PhoenixEngine::Transform{ PhoenixEngine::Vector2{spawnX, spawnY}, PhoenixEngine::RandomRange(0.0f, PhoenixEngine::TwoPi), 3 }, engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Shape>("enemyshape.txt"), 150.0f));
-	//			hasSpawned = true;
-	//		}
-	//	}
-	//}
+	for (size_t i = 0; i < level; i++)
+	{
+		bool hasSpawned = false;
+		while (!hasSpawned) {
+			float spawnX = PhoenixEngine::RandomRange(0.0f, 800.0f);
+			float spawnY = PhoenixEngine::RandomRange(0.0f, 600.0f);
+			if ((spawnX < 300.0f || spawnX > 500.0f) && (spawnY < 200.0f || spawnY > 400.0f)) 
+			{
+				scene->AddActor(std::make_unique<Enemy>(PhoenixEngine::Transform{ PhoenixEngine::Vector2{spawnX, spawnY}, PhoenixEngine::RandomRange(0.0f, PhoenixEngine::TwoPi), 3 }, enemyTexture , 150.0f));
+				hasSpawned = true;
+			}
+		}
+	}
 
-	//for (size_t i = 0; i < 2 + level; i++)
-	//{
-	//	bool hasSpawned = false;
-	//	while (!hasSpawned) {
-	//		float spawnX = PhoenixEngine::RandomRange(0.0f, 800.0f);
-	//		float spawnY = PhoenixEngine::RandomRange(0.0f, 600.0f);
-	//		if ((spawnX < 300.0f || spawnX > 500.0f) && (spawnY < 200.0f || spawnY > 400.0f))
-	//		{
-	//			//scene->AddActor(std::make_unique<Astroid>(PhoenixEngine::Transform{ PhoenixEngine::Vector2{spawnX, spawnY}, PhoenixEngine::RandomRange(0.0f, PhoenixEngine::TwoPi), 3 }, engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Shape>("astroidshape.txt"), 150.0f));
-	//			hasSpawned = true;
-	//		}
-	//	}
-	//}
+	for (size_t i = 0; i < 2 + level; i++)
+	{
+		bool hasSpawned = false;
+		while (!hasSpawned) {
+			float spawnX = PhoenixEngine::RandomRange(0.0f, 800.0f);
+			float spawnY = PhoenixEngine::RandomRange(0.0f, 600.0f);
+			if ((spawnX < 300.0f || spawnX > 500.0f) && (spawnY < 200.0f || spawnY > 400.0f))
+			{
+				scene->AddActor(std::make_unique<Asteroid>(PhoenixEngine::Transform{ PhoenixEngine::Vector2{spawnX, spawnY}, PhoenixEngine::RandomRange(0.0f, PhoenixEngine::TwoPi), 3 }, asteroidTexture, 150.0f));
+				hasSpawned = true;
+			}
+		}
+	}
 
 	state = eState::Game;
 }

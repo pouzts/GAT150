@@ -17,9 +17,9 @@ public:
 private:
 	float fireTimer{ 0 };
 	float fireRate{ 0.2f };
-	float speed{ 600 };
+	float speed{ 150 };
 
-	size_t health = 10;
+	size_t health{10};
 	
 	PhoenixEngine::Vector2 velocity;
 };

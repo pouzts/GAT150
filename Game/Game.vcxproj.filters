@@ -23,12 +23,30 @@
     <ClCompile Include="Actors\Player.cpp">
       <Filter>Sources\Actors</Filter>
     </ClCompile>
+    <ClCompile Include="Actors\Projectile.cpp">
+      <Filter>Sources\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="Actors\Enemy.cpp">
+      <Filter>Sources\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="Actors\Asteroid.cpp">
+      <Filter>Sources\Actors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="Actors\Player.h">
+      <Filter>Sources\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Actors\Projectile.h">
+      <Filter>Sources\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Actors\Enemy.h">
+      <Filter>Sources\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Actors\Asteroid.h">
       <Filter>Sources\Actors</Filter>
     </ClInclude>
   </ItemGroup>

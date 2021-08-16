@@ -1,10 +1,10 @@
 #pragma once
-#include "Base/Actor.h"
+#include "Object/Actor.h"
 
 class Enemy : public PhoenixEngine::Actor
 {
 public:
-	Enemy(const PhoenixEngine::Transform& transform, std::shared_ptr<PhoenixEngine::Shape> shape, float speed) : Actor{ transform, shape }, speed{ speed } {}
+	Enemy(const PhoenixEngine::Transform& transform, std::shared_ptr<PhoenixEngine::Texture> texture, float speed) : Actor{ transform, texture }, speed{ speed } {}
 
 	void Update(float dt) override;
 	void OnCollision(Actor* actor) override;
