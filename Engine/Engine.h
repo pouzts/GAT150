@@ -1,9 +1,11 @@
 #pragma once
-// Systems
-//#include "Audio/AudioSystem.h"
 
-//Audio
+// Audio
 #include "Audio/AudioSystem.h"
+
+// Component
+#include "Component/SpriteComponent.h"
+#include "Component/PhysicsComponent.h"
 
 // Core
 #include "Core/FileSystem.h"
