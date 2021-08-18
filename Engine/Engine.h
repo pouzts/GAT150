@@ -6,6 +6,7 @@
 // Component
 #include "Component/SpriteComponent.h"
 #include "Component/PhysicsComponent.h"
+#include "Component/SpriteAnimationComponent.h"
 
 // Core
 #include "Core/FileSystem.h"

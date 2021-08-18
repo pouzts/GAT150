@@ -11,17 +11,19 @@ void Game::Initialize()
 
 	PhoenixEngine::SetFilePath("../Resources");
 
-	std::unique_ptr<PhoenixEngine::Actor> actor = std::make_unique<PhoenixEngine::Actor>(PhoenixEngine::Transform{ {400, 300} });
+	std::unique_ptr<PhoenixEngine::Actor> actor = std::make_unique<PhoenixEngine::Actor>(PhoenixEngine::Transform{ {400, 300}, 0, 1 });
 	{
-		std::unique_ptr<PhoenixEngine::SpriteComponent> component = std::make_unique<PhoenixEngine::SpriteComponent>();
-		component->texture = engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("sf2.png", engine->Get<PhoenixEngine::Renderer>());
-		actor->AddComponent(std::move(component));
+		PhoenixEngine::SpriteAnimationComponent* component = actor->AddComponent<PhoenixEngine::SpriteAnimationComponent>();
+		component->texture = engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("sprites/sparkle.png", engine->Get<PhoenixEngine::Renderer>());
+		component->fps = 30;
+		component->numFramesX = 8;
+		component->numFramesY = 8;
+
 	}
-	{
-		std::unique_ptr<PhoenixEngine::PhysicsComponent> component = std::make_unique<PhoenixEngine::PhysicsComponent>();
+	/*{
+		PhoenixEngine::PhysicsComponent* component = actor->AddComponent<PhoenixEngine::PhysicsComponent>();
 		component->ApplyForce(PhoenixEngine::Vector2::right * 200);
-		actor->AddComponent(std::move(component));
-	}
+	}*/
 	scene->AddActor(std::move(actor));
 }
 
