@@ -1,12 +1,9 @@
 #pragma once
 
-// Audio
-#include "Audio/AudioSystem.h"
-
-// Component
-#include "Component/SpriteComponent.h"
-#include "Component/PhysicsComponent.h"
-#include "Component/SpriteAnimationComponent.h"
+// Framework
+#include "Framework/EventSystem.h"
+#include "Framework/Singleton.h"
+#include "Framework/Factory.h"
 
 // Core
 #include "Core/FileSystem.h"
@@ -20,14 +17,21 @@
 #include "Math/MathUtils.h"
 #include "Math/Transform.h"
 
+// Audio
+#include "Audio/AudioSystem.h"
+
+// Component
+#include "Component/SpriteComponent.h"
+#include "Component/PhysicsComponent.h"
+#include "Component/SpriteAnimationComponent.h"
+
 // Graphics
 #include "Graphics/Renderer.h"
 #include "Graphics/Texture.h"
 #include "Graphics/ParticleSystem.h"
 #include "Graphics/Font.h"
 
-// Framework
-#include "Framework/EventSystem.h"
+// Resource
 #include "Resource/ResourceSystem.h"
 
 // Objects
@@ -43,6 +47,8 @@
 
 namespace PhoenixEngine
 {
+	using ObjectFactory = Singleton<Factory<std::string, Object>>;
+
 	class Engine
 	{
 	public:

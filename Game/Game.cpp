@@ -13,12 +13,12 @@ void Game::Initialize()
 
 	std::unique_ptr<PhoenixEngine::Actor> actor = std::make_unique<PhoenixEngine::Actor>(PhoenixEngine::Transform{ {400, 300}, 0, 1 });
 	{
-		PhoenixEngine::SpriteAnimationComponent* component = actor->AddComponent<PhoenixEngine::SpriteAnimationComponent>();
+		auto component = PhoenixEngine::ObjectFactory::Instance().Create<PhoenixEngine::SpriteAnimationComponent>("SpriteAnimationComponent");
 		component->texture = engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("sprites/sparkle.png", engine->Get<PhoenixEngine::Renderer>());
 		component->fps = 30;
 		component->numFramesX = 8;
 		component->numFramesY = 8;
-
+		actor->AddComponent(std::move(component));
 	}
 	/*{
 		PhoenixEngine::PhysicsComponent* component = actor->AddComponent<PhoenixEngine::PhysicsComponent>();

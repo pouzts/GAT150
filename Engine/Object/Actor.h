@@ -25,6 +25,8 @@ namespace PhoenixEngine
 
 		void AddChild(std::unique_ptr<Actor> child);
 
+		void AddComponent(std::unique_ptr<Component> component);
+		
 		template<class T>
 		T* AddComponent();
 
