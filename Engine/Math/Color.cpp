@@ -36,4 +36,12 @@ namespace PhoenixEngine
 
 		return stream;
 	}
+
+	std::ostream& operator<<(std::ostream& stream, Color& c)
+	{
+		stream << c.r << " " << c.g << " " << c.b;
+
+		return stream;
+	}
+
 }

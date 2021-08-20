@@ -19,6 +19,11 @@ namespace PhoenixEngine
 			b = ((rgb >> 16) & 0xFF) / 255.0f; // 0-255 -> 0-1
 		}
 
+		float operator [] (size_t index) const { return (&r)[index]; }
+		float& operator [] (size_t index) { return (&r)[index]; }
+
+		void Set(float r, float g, float b) { this->r = r; this->g = g; this->b = b; }
+
 		Color operator + (const Color& color) { return{r + color.r, b + color.b, g + color.g}; }
 		Color operator - (const Color& color) { return{r - color.r, b - color.b, g - color.g}; }
 		Color operator * (float s) const { return Color{ r * s, g * s, b * s }; }
@@ -45,6 +50,7 @@ namespace PhoenixEngine
 		}
 
 		friend std::istream& operator >> (std::istream& stream, Color& c);
+		friend std::ostream& operator << (std::ostream& stream, Color& c);
 
 		static const Color white;
 		static const Color red;

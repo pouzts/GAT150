@@ -11,10 +11,12 @@ namespace PhoenixEngine
 		systems.push_back(std::make_unique<ParticleSystem>());
 		systems.push_back(std::make_unique<AudioSystem>());
 
-		std::for_each(systems.begin(), systems.end(), [](auto& system) {system->Startup(); });
+		std::for_each(systems.begin(), systems.end(), [](auto& system) { system->Startup(); });
 
-		ObjectFactory::Instance().Register<PhoenixEngine::SpriteComponent>("SpriteComponent");
-		ObjectFactory::Instance().Register<PhoenixEngine::SpriteAnimationComponent>("SpriteAnimationComponent");
+		REGISTER_CLASS(Actor)
+		REGISTER_CLASS(SpriteComponent)
+		REGISTER_CLASS(SpriteAnimationComponent)
+		REGISTER_CLASS(PhysicsComponent)
 	}
 
 	void Engine::Shutdown()
