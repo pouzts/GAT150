@@ -1,17 +1,18 @@
 #pragma once
 
-#define REGISTER_CLASS(CLASS) ObjectFactory::Instance().Register<CLASS>(#CLASS);
-
-// Framework
-#include "Framework/EventSystem.h"
-#include "Framework/Singleton.h"
-#include "Framework/Factory.h"
+#define REGISTER_CLASS(class) ObjectFactory::Instance().Register<class>(#class);
 
 // Core
 #include "Core/Json.h"
 #include "Core/FileSystem.h"
 #include "Core/Timer.h"
 #include "Core/Utilities.h"
+#include "Core/Serializable.h"
+
+// Framework
+#include "Framework/EventSystem.h"
+#include "Framework/Singleton.h"
+#include "Framework/Factory.h"
 
 // Math
 #include "Math/Vector2.h"

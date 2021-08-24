@@ -2,6 +2,7 @@
 #include "Object/Object.h"
 #include "Component/Component.h"
 #include "Math/Transform.h"
+#include "Core/Serializable.h"
 #include <memory>
 #include <vector>
 
@@ -10,7 +11,7 @@ namespace PhoenixEngine
 	class Scene;
 	class Renderer;
 
-	class Actor : public Object
+	class Actor : public Object, public ISerializable
 	{
 	public:
 		Actor() {}
@@ -31,6 +32,10 @@ namespace PhoenixEngine
 		T* AddComponent();
 
 		float GetRadius();
+
+		// Inherited via ISerializable
+		virtual bool Write(const rapidjson::Value& value) const override;
+		virtual bool Read(const rapidjson::Value& value) override;
 	
 	public:
 		bool destroy = false;
@@ -44,6 +49,7 @@ namespace PhoenixEngine
 		std::vector<std::unique_ptr<Actor>> children;
 		
 		std::vector<std::unique_ptr<Component>> components;
+
 	};
 	
 	template<class T>

@@ -4,6 +4,8 @@
 #include "document.h"
 #include <string>
 
+#define JSON_READ(value, data) PhoenixEngine::json::Get(value, #data, data);
+
 namespace PhoenixEngine
 {	
 	namespace json

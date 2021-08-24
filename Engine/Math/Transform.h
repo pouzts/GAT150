@@ -1,8 +1,10 @@
 #pragma once
 #include "Matrix33.h"
+#include "Core/Serializable.h"
+
 namespace PhoenixEngine
 {
-	struct Transform
+	struct Transform : public ISerializable
 	{
 		Vector2 position;
 		float rotation{0};
@@ -19,5 +21,9 @@ namespace PhoenixEngine
 
 		void Update();
 		void Update(const Matrix33& mx);
+
+		// Inherited via ISerializable
+		virtual bool Write(const rapidjson::Value& value) const override;
+		virtual bool Read(const rapidjson::Value& value) override;
 	};
 }
