@@ -1,6 +1,6 @@
 #pragma once
 
-#define REGISTER_CLASS(class) ObjectFactory::Instance().Register<class>(#class);
+#define REGISTER_CLASS(class) PhoenixEngine::ObjectFactory::Instance().Register<class>(#class);
 
 // Core
 #include "Core/Json.h"
@@ -21,12 +21,16 @@
 #include "Math/MathUtils.h"
 #include "Math/Transform.h"
 
+// Physics
+#include "Physics/PhysicsSystem.h"
+
 // Audio
 #include "Audio/AudioSystem.h"
 
 // Component
 #include "Component/SpriteComponent.h"
 #include "Component/PhysicsComponent.h"
+#include "Component/RBPhysicsComponent.h"
 #include "Component/SpriteAnimationComponent.h"
 
 // Graphics

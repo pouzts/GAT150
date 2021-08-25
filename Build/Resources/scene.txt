@@ -16,11 +16,22 @@
 			},
 			"components":[
 				{
+					"type":"PlayerComponent",
+					"speed":300
+				},
+				{
 					"type":"SpriteAnimationComponent",
 					"textureName":"sprites/character.png",
 					"fps":60,
 					"numFramesX":12,
 					"numFramesY":8
+				},
+				{
+					"type":"RBPhysicsComponent",
+					"data.isDynamic":true,
+					"data.density":1,
+					"data.lockAngle":true,
+					"data.size":[64, 98]
 				}
 			]
 		}

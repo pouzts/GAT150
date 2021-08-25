@@ -1,11 +1,17 @@
 #include "Game.h"
+#include "GameComponent/PlayerComponent.h"
 
 void Game::Initialize()
 {
+	// create engine
 	engine = std::make_unique<PhoenixEngine::Engine>();
 	engine->Startup();
 	engine->Get<PhoenixEngine::Renderer>()->Create("GAT150", 800, 600);
 
+	// register classes
+	REGISTER_CLASS(PlayerComponent);
+
+	// create scene
 	scene = std::make_unique<PhoenixEngine::Scene>();
 	scene->engine = engine.get();
 

@@ -1,20 +1,20 @@
 #pragma once
-#include "Component.h"
-#include "Math/Vector2.h"
+#include "PhysicsComponent.h"
+#include "Physics/PhysicsSystem.h"
 
 namespace PhoenixEngine
 {
-	class PhysicsComponent : public Component
+	class RBPhysicsComponent : public PhysicsComponent
 	{
 	public:
 		void Update() override;
-		virtual void ApplyForce(const Vector2& force) { acceleration += force; }
+		void ApplyForce(const Vector2& force) override;
 		// Inherited via Component
 		virtual bool Write(const rapidjson::Value& value) const override;
 		virtual bool Read(const rapidjson::Value& value) override;
+
 	public:
-		Vector2 velocity;
-		Vector2 acceleration;
-		float damping = 1;
+		PhysicsSystem::RigidBodyData data;
+		b2Body* body{nullptr};
 	};
 }
