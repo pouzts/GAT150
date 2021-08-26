@@ -5,14 +5,17 @@ namespace PhoenixEngine
 {
 	void SpriteAnimationComponent::Update()
 	{
-		frameTime = 1.0f/static_cast<float>(fps);
+		frameTime = 1.0f / static_cast<float>(fps);
 
 		frameTimer += owner->scene->engine->time.deltaTime;
 		if (frameTimer >= frameTime)
 		{
 			frameTimer = 0.0f;
 			frame++;
-			if (frame >= numFramesX * numFramesY) frame = 0;
+			if (frame >= endFrame)
+			{
+				frame = startFrame;
+			}
 		}
 
 		Vector2 size = texture->GetSize();
@@ -41,6 +44,11 @@ namespace PhoenixEngine
 		JSON_READ(value, fps);
 		JSON_READ(value, numFramesX);
 		JSON_READ(value, numFramesY);
+		JSON_READ(value, startFrame);
+		JSON_READ(value, endFrame);
+
+		if (startFrame == 0 && endFrame == 0) endFrame = numFramesX * numFramesY;
+		frame = startFrame;
 
 		return true;
 	}

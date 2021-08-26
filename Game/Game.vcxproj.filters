@@ -23,12 +23,18 @@
     <ClCompile Include="GameComponent\PlayerComponent.cpp">
       <Filter>Sources\GameComponent</Filter>
     </ClCompile>
+    <ClCompile Include="GameComponent\EnemyComponent.cpp">
+      <Filter>Sources\GameComponent</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="GameComponent\PlayerComponent.h">
+      <Filter>Sources\GameComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="GameComponent\EnemyComponent.h">
       <Filter>Sources\GameComponent</Filter>
     </ClInclude>
   </ItemGroup>

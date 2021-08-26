@@ -14,7 +14,7 @@ namespace PhoenixEngine
 		virtual bool Read(const rapidjson::Value& value) override;
 	
 	public:
-		int frame{ 0 }, fps{ 0 }, numFramesX{ 0 }, numFramesY{0};
+		int frame{ 0 }, fps{ 0 }, numFramesX{ 0 }, numFramesY{ 0 }, startFrame{0}, endFrame{0};
 		float frameTimer{ 0.0f }, frameTime{ 0.0f };
 		SDL_Rect rect;
 	};

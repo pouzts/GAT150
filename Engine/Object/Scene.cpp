@@ -67,6 +67,16 @@ namespace PhoenixEngine
 		actors.clear();
 	}
 
+	Actor* Scene::FindActor(const std::string name)
+	{
+		for (auto& actor : actors)
+		{
+			if (actor->name == name) return actor.get();
+		}
+		
+		return nullptr;
+	}
+
 	bool Scene::Write(const rapidjson::Value& value) const
 	{
 		return false;

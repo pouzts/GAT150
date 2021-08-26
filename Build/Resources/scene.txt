@@ -3,6 +3,7 @@
 		{
 			"type":"Actor",
 			"tag":"Player",
+			"name":"Player",
 			"transform":{
 				"position": [
 					400, 
@@ -10,30 +11,102 @@
 				],
 				"rotation":0,
 				"scale":[
-					2,
-					2
+					3,
+					3
 				]
 			},
 			"components":[
 				{
 					"type":"PlayerComponent",
-					"speed":300
+					"speed":150
 				},
 				{
 					"type":"SpriteAnimationComponent",
-					"textureName":"sprites/character.png",
-					"fps":60,
-					"numFramesX":12,
-					"numFramesY":8
+					"textureName":"sprites/characters.png",
+					"fps":24,
+					"numFramesX":18,
+					"numFramesY":11,
+					"startFrame":90,
+					"endFrame":95
 				},
 				{
 					"type":"RBPhysicsComponent",
 					"data.isDynamic":true,
-					"data.density":1,
+					"data.density":3,
 					"data.lockAngle":true,
-					"data.size":[64, 98]
+					"data.restitution":0.1,
+					"data.gravityScale":1,
+					"data.size":[48, 48]
 				}
 			]
-		}
+		},
+		{
+			"type":"Actor",
+			"tag":"Enemy",
+			"transform":{
+				"position": [
+					500, 
+					200
+				],
+				"rotation":0,
+				"scale":[
+					3,
+					3
+				]
+			},
+			"components":[
+				{
+					"type":"EnemyComponent",
+					"speed":50
+				},
+				{
+					"type":"SpriteAnimationComponent",
+					"textureName":"sprites/bat.png",
+					"fps":24,
+					"numFramesX":4,
+					"numFramesY":1
+				},
+				{
+					"type":"RBPhysicsComponent",
+					"data.isDynamic":true,
+					"data.isSensor":true,
+					"data.density":1,
+					"data.lockAngle":true,
+					"data.restitution":0.1,
+					"data.gravityScale":0,
+					"data.size":[48, 48]
+				}
+			]
+		},
+		{
+         "type":"Actor",
+         "tag":"Ground",
+         "transform":{
+            "position":[
+               400,
+               550
+            ],
+            "rotation":0,
+            "scale":[
+               1,
+               1
+            ]
+         },
+         "components":[
+            {
+               "type":"SpriteComponent",
+               "textureName":"sprites/ground.png"
+            },
+            {
+               "type":"RBPhysicsComponent",
+               "data.isDynamic":false,
+               "data.density":1,
+               "data.size":[
+                  800,
+                  20
+               ]
+            }
+         ]
+      }
 	]
 }
