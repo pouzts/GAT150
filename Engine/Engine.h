@@ -32,6 +32,8 @@
 #include "Component/PhysicsComponent.h"
 #include "Component/RBPhysicsComponent.h"
 #include "Component/SpriteAnimationComponent.h"
+#include "Component/AudioComponent.h"
+#include "Component/TextComponent.h"
 
 // Graphics
 #include "Graphics/Renderer.h"

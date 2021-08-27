@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Framework/System.h"
 #include "AudioChannel.h"
 #include <fmod.hpp>

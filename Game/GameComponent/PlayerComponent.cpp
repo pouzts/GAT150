@@ -6,14 +6,19 @@ using namespace PhoenixEngine;
 void PlayerComponent::Update()
 {
 	Vector2 force = Vector2::zero;
-	if (owner->scene->engine->Get<InputSystem>()->GetKeyState(SDL_SCANCODE_A) == InputSystem::eKeyState::Held)
+	if (owner->scene->engine->Get<InputSystem>()->GetKeyState(SDL_SCANCODE_LEFT) == InputSystem::eKeyState::Held)
 	{
 		force.x -= speed;
 	}
 
-	if (owner->scene->engine->Get<InputSystem>()->GetKeyState(SDL_SCANCODE_D) == InputSystem::eKeyState::Held)
+	if (owner->scene->engine->Get<InputSystem>()->GetKeyState(SDL_SCANCODE_RIGHT) == InputSystem::eKeyState::Held)
 	{
 		force.x += speed;
+	}
+
+	if (owner->scene->engine->Get<InputSystem>()->GetKeyState(SDL_SCANCODE_SPACE) == InputSystem::eKeyState::Pressed)
+	{
+		//TODO: Implement jumping
 	}
 
 	PhysicsComponent* physicsComponent = owner->GetComponent<PhysicsComponent>();

@@ -37,6 +37,11 @@
 					"data.restitution":0.1,
 					"data.gravityScale":1,
 					"data.size":[48, 48]
+				},
+				{
+					"type":"AudioComponent",
+					"soundName":"audio/grunt.wav",
+					"playOnAwake":true
 				}
 			]
 		},
@@ -107,6 +112,29 @@
                ]
             }
          ]
-      }
+      },
+	  {
+			"type":"Actor",
+			"name":"Score",
+			"transform":{
+				"position":[
+					60,
+					20
+				]
+			},
+			"components":[
+				{
+					"type":"TextComponent",
+					"fontName":"fonts/November.ttf",
+					"fontSize":16,
+					"color":[
+						1,
+						1,
+						1
+					],
+					"text":"Hello World!"
+				}
+			]
+		}
 	]
 }
