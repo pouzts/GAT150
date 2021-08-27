@@ -1,14 +1,26 @@
 #pragma once
 #include "SpriteComponent.h"
 #include <SDL.h>
+#include <map>
 
 namespace PhoenixEngine
 {
 	class SpriteAnimationComponent : public SpriteComponent
 	{
+	private:
+		struct Sequence
+		{
+			int fps{ 0 };
+			int startFrame{ 0 };
+			int endFrame{ 0 };
+		};
+
 	public:
 		void Update() override;
 		void Draw(Renderer* renderer) override;
+
+		void StartSequence(const std::string& name);
+
 		// Inherited via SpriteComponent
 		virtual bool Write(const rapidjson::Value& value) const override;
 		virtual bool Read(const rapidjson::Value& value) override;
@@ -16,6 +28,10 @@ namespace PhoenixEngine
 	public:
 		int frame{ 0 }, fps{ 0 }, numFramesX{ 0 }, numFramesY{ 0 }, startFrame{0}, endFrame{0};
 		float frameTimer{ 0.0f }, frameTime{ 0.0f };
+		
 		SDL_Rect rect;
+		
+		std::map<std::string, Sequence> sequences;
+		std::string sequenceName;
 	};
 }

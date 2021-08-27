@@ -119,6 +119,9 @@
     <ClCompile Include="Component\TextComponent.cpp">
       <Filter>Source\Component</Filter>
     </ClCompile>
+    <ClCompile Include="Physics\ContactListener.cpp">
+      <Filter>Source\Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -234,6 +237,9 @@
     </ClInclude>
     <ClInclude Include="Component\TextComponent.h">
       <Filter>Source\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\ContactListener.h">
+      <Filter>Source\Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

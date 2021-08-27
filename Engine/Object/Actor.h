@@ -22,7 +22,8 @@ namespace PhoenixEngine
 		virtual void Update(float dt);
 		virtual void Draw(Renderer* renderer);
 
-		virtual void OnCollision(Actor* actor) {}
+		void BeginContact(Actor* other);
+		void EndContact(Actor* other);
 
 		void AddChild(std::unique_ptr<Actor> child);
 
@@ -33,8 +34,6 @@ namespace PhoenixEngine
 		
 		template<class T>
 		T* GetComponent();
-
-		float GetRadius();
 
 		// Inherited via ISerializable
 		virtual bool Write(const rapidjson::Value& value) const override;

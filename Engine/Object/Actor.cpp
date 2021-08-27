@@ -24,6 +24,32 @@ namespace PhoenixEngine
 		std::for_each(children.begin(), children.end(), [renderer](auto& child) {child->Draw(renderer); });
 	}
 
+	void Actor::BeginContact(Actor* other)
+	{
+		Event event;
+
+		event.name = "collision_enter";
+		event.data = other;
+		event.receiver = this;
+
+		scene->engine->Get<EventSystem>()->Notify(event);
+
+		//std::cout << "begin: " << other->tag << std::endl;
+	}
+
+	void Actor::EndContact(Actor* other)
+	{
+		Event event;
+
+		event.name = "collision_exit";
+		event.data = other;
+		event.receiver = this;
+
+		scene->engine->Get<EventSystem>()->Notify(event);
+
+		//std::cout << "end: " << other->tag << std::endl;
+	}
+
 	void Actor::AddChild(std::unique_ptr<Actor> child)
 	{
 		child->parent = this;
@@ -36,11 +62,6 @@ namespace PhoenixEngine
 		components.push_back(std::move(component));
 	}
 
-	float Actor::GetRadius()
-	{
-		return 0.0f;
-	}
-	
 	bool Actor::Write(const rapidjson::Value& value) const
 	{
 		return false;
@@ -68,6 +89,7 @@ namespace PhoenixEngine
 				{
 					component->owner = this;
 					component->Read(componentValue);
+					component->Create();
 					AddComponent(std::move(component));
 				}
 			}

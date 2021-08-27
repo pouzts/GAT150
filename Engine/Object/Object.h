@@ -6,5 +6,7 @@ namespace PhoenixEngine
 	{
 	public:
 		virtual ~Object() {}
+
+		virtual void Create() {}
 	};
 }
