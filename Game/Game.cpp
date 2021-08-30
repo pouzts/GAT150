@@ -26,20 +26,12 @@ void Game::Initialize()
 	assert(success);
 	scene->Read(document);
 
-	//std::unique_ptr<PhoenixEngine::Actor> actor = std::make_unique<PhoenixEngine::Actor>(PhoenixEngine::Transform{ {400, 300}, 0, 1 });
-	//{
-	//	auto component = PhoenixEngine::ObjectFactory::Instance().Create<PhoenixEngine::SpriteAnimationComponent>("SpriteAnimationComponent");
-	//	component->texture = engine->Get<PhoenixEngine::ResourceSystem>()->Get<PhoenixEngine::Texture>("sprites/sparkle.png", engine->Get<PhoenixEngine::Renderer>());
-	//	component->fps = 30;
-	//	component->numFramesX = 8;
-	//	component->numFramesY = 8;
-	//	actor->AddComponent(std::move(component));
-	//}
-	///*{
-	//	PhoenixEngine::PhysicsComponent* component = actor->AddComponent<PhoenixEngine::PhysicsComponent>();
-	//	component->ApplyForce(PhoenixEngine::Vector2::right * 200);
-	//}*/
-	//scene->AddActor(std::move(actor));
+	for (size_t i = 0; i < 10; i++) 
+	{
+		auto actor = PhoenixEngine::ObjectFactory::Instance().Create<PhoenixEngine::Actor>("Coin");
+		actor->transform.position = PhoenixEngine::Vector2{PhoenixEngine::RandomRange(0,800), PhoenixEngine::RandomRange(250,300)};
+		scene->AddActor(std::move(actor));
+	}
 }
 
 void Game::Shutdown()
