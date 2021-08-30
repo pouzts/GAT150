@@ -105,6 +105,45 @@
 			]
 		},
 		{
+			"type":"Actor",
+			"name":"Coin",
+			"tag":"Pickup",
+			"transform":{
+				"position": [
+					400, 
+					500
+				],
+				"rotation":0,
+				"scale":[
+					3,
+					3
+				]
+			},
+			"components":[
+				{
+					"type":"PickupComponent",
+					"points":100
+				},
+				{
+					"type":"SpriteAnimationComponent",
+					"textureName":"sprites/coin.png",
+					"fps":24,
+					"numFramesX":8,
+					"numFramesY":1
+				},
+				{
+					"type":"RBPhysicsComponent",
+					"data.isDynamic":true,
+					"data.isSensor":true,
+					"data.density":1,
+					"data.lockAngle":true,
+					"data.restitution":0.1,
+					"data.gravityScale":0,
+					"data.size":[48, 48]
+				}
+			]
+		},
+		{
          "type":"Actor",
          "tag":"Ground",
          "transform":{

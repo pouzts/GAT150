@@ -32,7 +32,7 @@ namespace PhoenixEngine
 		event.data = other;
 		event.receiver = this;
 
-		scene->engine->Get<EventSystem>()->Notify(event);
+		if (!destroy) scene->engine->Get<EventSystem>()->Notify(event);
 
 		//std::cout << "begin: " << other->tag << std::endl;
 	}
@@ -45,7 +45,7 @@ namespace PhoenixEngine
 		event.data = other;
 		event.receiver = this;
 
-		scene->engine->Get<EventSystem>()->Notify(event);
+		if (!destroy) scene->engine->Get<EventSystem>()->Notify(event);
 
 		//std::cout << "end: " << other->tag << std::endl;
 	}
