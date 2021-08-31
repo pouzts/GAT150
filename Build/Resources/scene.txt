@@ -95,7 +95,7 @@
 				{
 					"type":"RBPhysicsComponent",
 					"data.isDynamic":true,
-					"data.isSensor":true,
+					"data.isSensor":false,
 					"data.density":1,
 					"data.lockAngle":true,
 					"data.restitution":0.1,
@@ -116,8 +116,8 @@
 				],
 				"rotation":0,
 				"scale":[
-					2,
-					2
+					1,
+					1
 				]
 			},
 			"components":[
@@ -135,12 +135,12 @@
 				{
 					"type":"RBPhysicsComponent",
 					"data.isDynamic":true,
-					"data.isSensor":true,
+					"data.isSensor":false,
 					"data.density":1,
 					"data.lockAngle":true,
 					"data.restitution":0.1,
-					"data.gravityScale":0,
-					"data.size":[48, 48]
+					"data.gravityScale":1,
+					"data.size":[16, 16]
 				}
 			]
 		},
@@ -170,6 +170,62 @@
                "data.size":[
                   800,
                   20
+               ]
+            }
+         ]
+      },
+	  {
+         "type":"Actor",
+		 "name":"tile01",
+         "tag":"Ground",
+		 "prototype":true,
+         "transform":{
+            "scale":[
+               2,
+               2
+            ]
+         },
+         "components":[
+            {
+               "type":"SpriteComponent",
+               "textureName":"sprites/tileset2_32x32.png",
+			   "rect":[416,128,32,32]
+            },
+            {
+               "type":"RBPhysicsComponent",
+               "data.isDynamic":false,
+               "data.density":1,
+               "data.size":[
+                  64,
+                  64
+               ]
+            }
+         ]
+      },
+	   {
+         "type":"Actor",
+		 "name":"tile02",
+         "tag":"Ground",
+		 "prototype":true,
+         "transform":{
+            "scale":[
+               2,
+               2
+            ]
+         },
+         "components":[
+            {
+               "type":"SpriteComponent",
+               "textureName":"sprites/tileset2_32x32.png",
+			   "rect":[416, 320, 32,32]
+            },
+            {
+               "type":"RBPhysicsComponent",
+               "data.isDynamic":false,
+               "data.density":1,
+               "data.size":[
+                  64,
+                  64
                ]
             }
          ]

@@ -24,7 +24,15 @@ void Game::Initialize()
 	rapidjson::Document document;
 	bool success = PhoenixEngine::json::Load("scene.txt", document);
 	assert(success);
+	
 	scene->Read(document);
+
+	PhoenixEngine::Tilemap tilemap;
+	tilemap.scene = scene.get();
+	success = PhoenixEngine::json::Load("map.txt", document);
+	assert(success);
+	tilemap.Read(document);
+	tilemap.Create();
 
 	for (size_t i = 0; i < 10; i++) 
 	{

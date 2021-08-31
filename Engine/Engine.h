@@ -47,6 +47,7 @@
 // Objects
 #include "Object/Scene.h"
 #include "Object/Actor.h"
+#include "Object/Tilemap.h"
 
 //Input
 #include "Input/InputSystem.h"

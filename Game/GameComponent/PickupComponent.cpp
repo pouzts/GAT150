@@ -27,11 +27,6 @@ void PickupComponent::OnCollisionEnter(const PhoenixEngine::Event& event)
 	void* p = std::get<void*>(event.data);
 	Actor* actor = reinterpret_cast<Actor*>(p);
 
-	if (istring_compare(actor->tag, "ground"))
-	{
-		contacts.push_back(actor);
-	}
-
 	if (istring_compare(actor->tag, "player"))
 	{
 		owner->destroy = true;
