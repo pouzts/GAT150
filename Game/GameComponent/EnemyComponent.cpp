@@ -26,6 +26,7 @@ bool EnemyComponent::Write(const rapidjson::Value& value) const
 bool EnemyComponent::Read(const rapidjson::Value& value)
 {
 	JSON_READ(value, speed);
+	JSON_READ(value, health);
 
 	return true;
 }

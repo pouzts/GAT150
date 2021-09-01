@@ -6,19 +6,20 @@ using namespace PhoenixEngine;
 PlayerComponent::~PlayerComponent()
 {
 	owner->scene->engine->Get<EventSystem>()->Unsubscribe("collision_enter", owner);
-	owner->scene->engine->Get<EventSystem>()->Unsubscribe("collision_exit", owner);
 }
 
 void PlayerComponent::Create()
 {
 	owner->scene->engine->Get<EventSystem>()->Subscribe("collision_enter", std::bind(&PlayerComponent::OnCollisionEnter, this, std::placeholders::_1), owner);
-	owner->scene->engine->Get<EventSystem>()->Subscribe("collision_exit", std::bind(&PlayerComponent::OnCollisionExit, this, std::placeholders::_1), owner);
 
 	owner->scene->engine->Get<AudioSystem>()->AddAudio("hurt", "audio/hurt.wav");
 }
 
 void PlayerComponent::Update()
 {
+	owner->destroy = (health <= 0);
+
+	// Movement
 	Vector2 force = Vector2::zero;
 	if (owner->scene->engine->Get<InputSystem>()->GetKeyState(SDL_SCANCODE_LEFT) == InputSystem::eKeyState::Held)
 	{
@@ -32,7 +33,7 @@ void PlayerComponent::Update()
 
 	if (contacts.size() > 0 && owner->scene->engine->Get<InputSystem>()->GetKeyState(SDL_SCANCODE_UP) == InputSystem::eKeyState::Pressed)
 	{
-		force.y -= 2500;
+		force.y -= jumpForce;
 	}
 
 	PhysicsComponent* physicsComponent = owner->GetComponent<PhysicsComponent>();
@@ -40,6 +41,7 @@ void PlayerComponent::Update()
 
 	physicsComponent->ApplyForce(force);
 	
+	// Changes Sprite Animation based on direction.
 	SpriteAnimationComponent* spriteAnimationComponent = owner->GetComponent<SpriteAnimationComponent>();
 	assert(spriteAnimationComponent);
 	if (physicsComponent->velocity.x > 0) spriteAnimationComponent->StartSequence("walk_right");
@@ -60,6 +62,7 @@ void PlayerComponent::OnCollisionEnter(const PhoenixEngine::Event& event)
 	if (istring_compare(actor->tag, "enemy"))
 	{
 		owner->scene->engine->Get<AudioSystem>()->PlayAudio("hurt");
+		health--;
 	}
 
 	std::cout << actor->tag << std::endl;
@@ -84,6 +87,8 @@ bool PlayerComponent::Write(const rapidjson::Value& value) const
 bool PlayerComponent::Read(const rapidjson::Value& value)
 {
 	JSON_READ(value, speed);
+	JSON_READ(value, jumpForce);
+	JSON_READ(value, health);
 
 	return true;
 }

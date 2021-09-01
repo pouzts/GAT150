@@ -4,6 +4,7 @@
 			"type":"Actor",
 			"tag":"Player",
 			"name":"Player",
+			"prototype":true,
 			"transform":{
 				"position": [
 					400, 
@@ -18,7 +19,9 @@
 			"components":[
 				{
 					"type":"PlayerComponent",
-					"speed":150
+					"speed":150,
+					"jumpForce":2500,
+					"health":10
 				},
 				{
 					"type":"SpriteAnimationComponent",
@@ -83,7 +86,8 @@
 			"components":[
 				{
 					"type":"EnemyComponent",
-					"speed":50
+					"speed":25,
+					"health":10
 				},
 				{
 					"type":"SpriteAnimationComponent",
@@ -144,36 +148,6 @@
 				}
 			]
 		},
-		{
-         "type":"Actor",
-         "tag":"Ground",
-         "transform":{
-            "position":[
-               400,
-               550
-            ],
-            "rotation":0,
-            "scale":[
-               1,
-               1
-            ]
-         },
-         "components":[
-            {
-               "type":"SpriteComponent",
-               "textureName":"sprites/ground.png"
-            },
-            {
-               "type":"RBPhysicsComponent",
-               "data.isDynamic":false,
-               "data.density":1,
-               "data.size":[
-                  800,
-                  20
-               ]
-            }
-         ]
-      },
 	  {
          "type":"Actor",
 		 "name":"tile01",
@@ -188,8 +162,8 @@
          "components":[
             {
                "type":"SpriteComponent",
-               "textureName":"sprites/tileset2_32x32.png",
-			   "rect":[416,128,32,32]
+               "textureName":"sprites/tileset1_32x32.png",
+			   "rect":[960,192,32,32]
             },
             {
                "type":"RBPhysicsComponent",
@@ -233,6 +207,29 @@
 	  {
 			"type":"Actor",
 			"name":"Score",
+			"transform":{
+				"position":[
+					60,
+					20
+				]
+			},
+			"components":[
+				{
+					"type":"TextComponent",
+					"fontName":"fonts/November.ttf",
+					"fontSize":16,
+					"color":[
+						1,
+						1,
+						1
+					],
+					"text":"Hello World!"
+				}
+			]
+		},
+		 {
+			"type":"Actor",
+			"name":"Health",
 			"transform":{
 				"position":[
 					60,

@@ -31,6 +31,12 @@ void PickupComponent::OnCollisionEnter(const PhoenixEngine::Event& event)
 	{
 		owner->destroy = true;
 		owner->scene->engine->Get<AudioSystem>()->PlayAudio("coin");
+
+		Event event;
+		event.name = "add_score";
+		event.data = 10;
+
+		owner->scene->engine->Get<EventSystem>()->Notify(event);
 	}
 }
 

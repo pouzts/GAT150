@@ -10,4 +10,5 @@ public:
 	virtual void Update() override;
 public:
 	float speed{ 0 };
+	int health{0};
 };
