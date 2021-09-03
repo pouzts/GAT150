@@ -1,4 +1,5 @@
 #include "ProjectileComponent.h"
+#include "PlayerComponent.h"
 #include "Engine.h"
 
 using namespace PhoenixEngine;
@@ -12,8 +13,6 @@ ProjectileComponent::~ProjectileComponent()
 void ProjectileComponent::Create()
 {
 	owner->scene->engine->Get<EventSystem>()->Subscribe("collision_enter", std::bind(&ProjectileComponent::OnCollisionEnter, this, std::placeholders::_1), owner);
-
-	owner->scene->engine->Get<AudioSystem>()->AddAudio("coin", "audio/coin.wav");
 }
 
 void ProjectileComponent::Update()
@@ -23,6 +22,32 @@ void ProjectileComponent::Update()
 	lifeTime -= dt;
 
 	owner->destroy = (lifeTime <= 0);
+
+	Vector2 force = Vector2::zero;
+	PlayerComponent::eDirection dir = PlayerComponent::eDirection::Up;
+	if (owner->scene->FindActor("Player")) dir = owner->scene->FindActor("Player")->GetComponent<PlayerComponent>()->dir;
+	float rotation = 0.0f;
+
+	if (dir == PlayerComponent::eDirection::Up) 
+	{
+		owner->transform.rotation = -90.0f;
+		force.y -= speed; 
+	}
+	else if (dir == PlayerComponent::eDirection::Left) 
+	{
+		owner->transform.rotation = 180.0f;
+		force.x -= speed; 
+	}
+	else
+	{ 
+		owner->transform.rotation = 0.0f;
+		force.x += speed; 
+	}
+
+	PhysicsComponent* physicsComponent = owner->GetComponent<PhysicsComponent>();
+	assert(physicsComponent);
+
+	physicsComponent->ApplyForce(force);
 }
 
 void ProjectileComponent::OnCollisionEnter(const PhoenixEngine::Event& event)

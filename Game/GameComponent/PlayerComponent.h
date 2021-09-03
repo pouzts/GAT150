@@ -5,6 +5,13 @@
 class PlayerComponent : public PhoenixEngine::Component
 {
 public:
+	enum class eDirection
+	{
+		Up,
+		Left,
+		Right
+	};
+public:
 	virtual ~PlayerComponent();
 
 	std::unique_ptr<Object> Clone() const { return std::make_unique<PlayerComponent>(*this); }
@@ -22,6 +29,8 @@ public:
 	float speed{ 0 };
 	float jumpForce{ 0 };
 	int health{ 0 };
+
+	eDirection dir = eDirection::Right;
 
 private:
 	std::list<PhoenixEngine::Actor*> contacts;

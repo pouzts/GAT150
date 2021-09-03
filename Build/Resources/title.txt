@@ -7,12 +7,13 @@
             "position":[
                 400,
                 300
-            ]
+            ],
+            "scale":[3,3]
         },
         "components":[
             {
                 "type":"SpriteComponent",
-                "textureName":"sprites/background.png"
+                "textureName":"sprites/background.jpg"
             }
         ]
     },
@@ -21,8 +22,8 @@
         "name":"Score",
         "transform":{
             "position":[
-                60,
-                20
+                150,
+                80
             ]
         },
         "components":[
@@ -35,10 +36,56 @@
                     1,
                     1
                 ],
-                "text":"0000"
+                "text":"SCORE:0"
             }
         ]
     },
+    {
+        "type":"Actor",
+        "name":"HighScore",
+        "transform":{
+            "position":[
+                650,
+                80
+            ]
+        },
+        "components":[
+            {
+                "type":"TextComponent",
+                "fontName":"fonts/November.ttf",
+                "fontSize":16,
+                "color":[
+                    0,
+                    0,
+                    1
+                ],
+                "text":"HI-SCORE:0"
+            }
+        ]
+    },
+    {
+         "type":"Actor",
+         "name":"Health",
+         "transform":{
+            "position":[
+               150,
+               100
+            ]
+         },
+         "components":[
+            {
+               "type":"TextComponent",
+               "fontName":"fonts/November.ttf",
+               "fontSize":16,
+               "color":[
+                  0.764,
+                  0.203,
+                  0.203
+               ],
+               "text":"HEALTH:0"
+            }
+         ]
+      },
     {
         "type":"Actor",
         "name":"Title",
@@ -54,11 +101,11 @@
                 "fontName":"fonts/November.ttf",
                 "fontSize":48,
                 "color":[
-                    0,
-                    0,
-                    0
+                    1,
+                    1,
+                    1
                 ],
-                "text":"Coin Battles"
+                "text":"Attack of the Vaders"
             }
         ]
     }

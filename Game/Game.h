@@ -35,16 +35,19 @@ private:
 	void GameOver();
 
 	void OnAddScore(const PhoenixEngine::Event event);
-	void OnPlayerDeath(const PhoenixEngine::Event event);
 
 public:
 	std::unique_ptr<PhoenixEngine::Engine> engine;
 	std::unique_ptr<PhoenixEngine::Scene> scene;
 
 private:
-	bool quit = false;
 	eState state = eState::Reset;
+	
+	bool quit = false;
+	
 	float stateTimer = 0;
 	float spawnTimer = 0;
+	
 	int score = 0;
+	int highScore = 0;
 };

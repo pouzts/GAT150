@@ -1,4 +1,5 @@
 #include "PlayerComponent.h"
+#include "ProjectileComponent.h"
 #include "Engine.h"
 
 using namespace PhoenixEngine;
@@ -6,13 +7,16 @@ using namespace PhoenixEngine;
 PlayerComponent::~PlayerComponent()
 {
 	owner->scene->engine->Get<EventSystem>()->Unsubscribe("collision_enter", owner);
+	owner->scene->engine->Get<EventSystem>()->Unsubscribe("collision_exit", owner);
 }
 
 void PlayerComponent::Create()
 {
 	owner->scene->engine->Get<EventSystem>()->Subscribe("collision_enter", std::bind(&PlayerComponent::OnCollisionEnter, this, std::placeholders::_1), owner);
+	owner->scene->engine->Get<EventSystem>()->Subscribe("collision_exit", std::bind(&PlayerComponent::OnCollisionExit, this, std::placeholders::_1), owner);
 
 	owner->scene->engine->Get<AudioSystem>()->AddAudio("hurt", "audio/hurt.wav");
+	owner->scene->engine->Get<AudioSystem>()->AddAudio("laser", "audio/player_fire.wav");
 }
 
 void PlayerComponent::Update()
@@ -21,17 +25,24 @@ void PlayerComponent::Update()
 
 	// Movement
 	Vector2 force = Vector2::zero;
-	if (owner->scene->engine->Get<InputSystem>()->GetKeyState(SDL_SCANCODE_LEFT) == InputSystem::eKeyState::Held)
+	if (owner->scene->engine->Get<InputSystem>()->GetKeyState(SDL_SCANCODE_A) == InputSystem::eKeyState::Held)
 	{
+		dir = eDirection::Left;
 		force.x -= speed;
 	}
-
-	if (owner->scene->engine->Get<InputSystem>()->GetKeyState(SDL_SCANCODE_RIGHT) == InputSystem::eKeyState::Held)
+	
+	if (owner->scene->engine->Get<InputSystem>()->GetKeyState(SDL_SCANCODE_D) == InputSystem::eKeyState::Held)
 	{
+		dir = eDirection::Right;
 		force.x += speed;
 	}
 
-	if (contacts.size() > 0 && owner->scene->engine->Get<InputSystem>()->GetKeyState(SDL_SCANCODE_UP) == InputSystem::eKeyState::Pressed)
+	if (owner->scene->engine->Get<InputSystem>()->GetKeyState(SDL_SCANCODE_W) == InputSystem::eKeyState::Held)
+	{
+		dir = eDirection::Up;
+	}
+
+	if (contacts.size() > 0 && owner->scene->engine->Get<InputSystem>()->GetKeyState(SDL_SCANCODE_SPACE) == InputSystem::eKeyState::Pressed)
 	{
 		force.y -= jumpForce;
 	}
@@ -44,9 +55,19 @@ void PlayerComponent::Update()
 	// Changes Sprite Animation based on direction.
 	SpriteAnimationComponent* spriteAnimationComponent = owner->GetComponent<SpriteAnimationComponent>();
 	assert(spriteAnimationComponent);
-	if (physicsComponent->velocity.x > 0) spriteAnimationComponent->StartSequence("walk_right");
-	else if (physicsComponent->velocity.x < 0) spriteAnimationComponent->StartSequence("walk_left");
-	else spriteAnimationComponent->StartSequence("idle");
+	if (dir == eDirection::Right) spriteAnimationComponent->StartSequence("walk_right");
+	else if (dir == eDirection::Left) spriteAnimationComponent->StartSequence("walk_left");
+	else spriteAnimationComponent->StartSequence("shoot_up");
+
+	//	Fires projectile
+	if (owner->scene->engine->Get<InputSystem>()->GetButtonState(0) == InputSystem::eKeyState::Pressed)
+	{
+		owner->scene->engine->Get<AudioSystem>()->PlayAudio("laser");
+
+		auto projectile = PhoenixEngine::ObjectFactory::Instance().Create<PhoenixEngine::Actor>("Projectile");
+		projectile->transform.position = owner->transform.position;
+		owner->scene->AddActor(std::move(projectile));
+	}
 }
 
 void PlayerComponent::OnCollisionEnter(const PhoenixEngine::Event& event)
